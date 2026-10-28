@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NetPing | Diagnostics</title>
+<link rel="stylesheet" href="../lab.css"><style>:root{--brand:#374151}</style>
+</head>
+<body>
+<div class="labbar"><span>Rowdy CyberCon // Lab 07: NetPing</span><a href="../index.html">&larr; back to labs</a></div>
+<header class="app-header"><h1>NetPing</h1><nav><a href="#">Diagnostics</a></nav></header>
+<div class="wrap">
+  <div class="panel">
+    <h2>Network Diagnostics</h2>
+    <p class="muted">Check if a host is reachable. Runs <code>ping -c 2 &lt;host&gt;</code> on the server.</p>
+    <form id="form"><label>Host</label><input type="text" id="host" placeholder="8.8.8.8" autocomplete="off"><button>Ping</button></form>
+  </div>
+  <div class="panel hidden" id="outpanel"><pre class="term" id="out"></pre></div>
+</div>
+<script src="shell.js"></script>
+<script>
+document.getElementById('form').addEventListener('submit', e => {
+  e.preventDefault();
+  document.getElementById('outpanel').classList.remove('hidden');
+  document.getElementById('out').textContent = simulateShell(document.getElementById('host').value);
+});
+</script>
+</body>
+</html>

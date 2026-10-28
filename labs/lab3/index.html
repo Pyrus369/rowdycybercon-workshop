@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GearShop | Search</title>
+<link rel="stylesheet" href="../lab.css"><style>:root{--brand:#7c3aed}</style>
+</head>
+<body>
+<div class="labbar"><span>Rowdy CyberCon // Lab 03: GearShop</span><a href="../index.html">&larr; back to labs</a></div>
+<header class="app-header"><h1>GearShop</h1><nav><a href="#">Catalog</a><a href="#">Support</a></nav></header>
+<div class="wrap">
+  <div class="panel">
+    <form id="form"><label>Search products</label><input type="text" id="q" autocomplete="off"><button>Search</button></form>
+    <div id="debug" class="debug"></div>
+    <div id="error"></div>
+  </div>
+  <div class="panel">
+    <table><thead><tr><th>Name</th><th>Description</th><th>Price</th></tr></thead><tbody id="rows"></tbody></table>
+  </div>
+</div>
+<script src="../../vendor/sql-wasm.js"></script>
+<script src="../sqldb.js"></script>
+<script>
+const dbReady = makeLabDb();
+const el = id => document.getElementById(id);
+
+async function search(q) {
+  const db = await dbReady;
+  // Simulates the vulnerable server-side code: string concatenation into SQL
+  const query = "SELECT name, description, price FROM products WHERE hidden = 0 AND name LIKE '%" + q + "%'";
+  el('debug').innerHTML = '<b>[debug] query executed:</b>\n';
+  el('debug').append(query);
+  el('error').innerHTML = '';
+  const tbody = el('rows');
+  tbody.innerHTML = '';
+  try {
+    const res = db.exec(query);
+    const rows = res.length ? res[0].values : [];
+    if (!rows.length) {
+      tbody.innerHTML = '<tr><td colspan="3" class="muted">No results.</td></tr>';
+    }
+    rows.slice(0, 50).forEach(r => {
+      const tr = document.createElement('tr');
+      r.slice(0, 3).forEach(v => { const td = document.createElement('td'); td.textContent = v; tr.appendChild(td); });
+      tbody.appendChild(tr);
+    });
+  } catch (err) {
+    const d = document.createElement('div');
+    d.className = 'error';
+    d.textContent = 'Database error: ' + err.message;
+    el('error').appendChild(d);
+  }
+}
+
+el('form').addEventListener('submit', e => { e.preventDefault(); search(el('q').value); });
+search('');
+</script>
+</body>
+</html>

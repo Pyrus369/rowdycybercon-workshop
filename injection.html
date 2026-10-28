@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>04 Injection | Breaking the Web</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="grid-bg"></div>
+  <button class="hamburger" aria-label="Toggle navigation">&#8801;</button>
+  <div class="sidebar-overlay"></div>
+
+  <div class="layout">
+    <nav class="sidebar"></nav>
+    <main class="main-content page-content">
+      <h1><span class="num">04.</span> Injection</h1>
+      <p class="lead">Injection happens when your input stops being <i>data</i> and starts being <i>code</i>.</p>
+
+      <h2>SQL Injection</h2>
+      <p>Apps store data in databases and query them with SQL. The bug appears when the app builds queries by gluing strings together:</p>
+<pre><code><span class="c"># vulnerable</span>
+query = <span class="s">"SELECT * FROM users WHERE username = '"</span> + username + <span class="s">"' AND password = '"</span> + password + <span class="s">"'"</span></code></pre>
+      <p>Normal input <code>alice</code> / <code>hunter2</code> produces:</p>
+<pre><code>SELECT * FROM users WHERE username = 'alice' AND password = 'hunter2'</code></pre>
+      <p>But what if the username is <code>admin'--</code>?</p>
+<pre><code>SELECT * FROM users WHERE username = 'admin'<span class="r">--' AND password = 'anything'</span></code></pre>
+      <p>The <code>'</code> closes the string, and <code>--</code> starts a comment, so the password check disappears. You're logged in as admin.</p>
+
+      <h3>Step 1: Detect it</h3>
+      <table>
+        <tr><th>Input</th><th>What to look for</th></tr>
+        <tr><td><code>'</code></td><td>A database error, or the page breaks</td></tr>
+        <tr><td><code>' OR '1'='1</code></td><td>More results than expected</td></tr>
+        <tr><td><code>' AND '1'='2</code></td><td>No results</td></tr>
+      </table>
+
+      <h3>Step 2: Extract data with UNION</h3>
+      <p><code>UNION</code> glues the results of a second query onto the first. Both queries must return the <b>same number of columns</b>.</p>
+<pre><code><span class="c">-- 1. Find the column count: increase until it errors</span>
+' ORDER BY 1--
+' ORDER BY 2--
+' ORDER BY 3--
+' ORDER BY 4--     <span class="r">← error, so there are 3 columns</span>
+
+<span class="c">-- 2. Confirm with UNION</span>
+' UNION SELECT 'a','b','c'--
+
+<span class="c">-- 3. List tables (SQLite)</span>
+' UNION SELECT name, sql, 1 FROM sqlite_master--
+
+<span class="c">-- 4. Dump what you want</span>
+' UNION SELECT username, password, 1 FROM users--</code></pre>
+      <div class="callout">
+        <strong>Where tables are listed</strong>
+        SQLite: <code>sqlite_master</code> · MySQL / PostgreSQL: <code>information_schema.tables</code> and <code>information_schema.columns</code>
+      </div>
+
+      <h3>The fix</h3>
+<pre><code><span class="c"># parameterized query: input is always treated as data</span>
+cursor.execute(<span class="s">"SELECT * FROM users WHERE username = ? AND password = ?"</span>, (username, password))</code></pre>
+
+      <h2>Command Injection</h2>
+      <p>Same idea, different interpreter. The app passes your input into a shell command:</p>
+<pre><code><span class="c"># vulnerable</span>
+os.system(<span class="s">"ping -c 2 "</span> + host)</code></pre>
+      <p>Shells let you chain commands. If <code>host</code> is <code>8.8.8.8; whoami</code>, the server runs both.</p>
+      <table>
+        <tr><th>Operator</th><th>Behavior</th></tr>
+        <tr><td><code>;</code></td><td>Run the next command regardless</td></tr>
+        <tr><td><code>&amp;&amp;</code></td><td>Run the next only if the first succeeded</td></tr>
+        <tr><td><code>||</code></td><td>Run the next only if the first failed</td></tr>
+        <tr><td><code>|</code></td><td>Pipe output of the first into the second</td></tr>
+        <tr><td><code>$(cmd)</code> or <code>`cmd`</code></td><td>Run cmd and substitute its output</td></tr>
+      </table>
+<pre><code>8.8.8.8; id
+8.8.8.8 &amp;&amp; ls -la
+x || cat /etc/passwd</code></pre>
+      <h3>The fix</h3>
+      <p>Don't call a shell with user input. Use a library function, or pass arguments as a list (<code>subprocess.run(["ping", "-c", "2", host])</code>) and validate the input against an allowlist.</p>
+
+      <a href="xss.html" class="next-section">05-xss <span>&rarr;</span></a>
+    </main>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

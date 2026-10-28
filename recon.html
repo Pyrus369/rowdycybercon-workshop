@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>03 Recon | Breaking the Web</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="grid-bg"></div>
+  <button class="hamburger" aria-label="Toggle navigation">&#8801;</button>
+  <div class="sidebar-overlay"></div>
+
+  <div class="layout">
+    <nav class="sidebar"></nav>
+    <main class="main-content page-content">
+      <h1><span class="num">03.</span> Recon</h1>
+      <p class="lead">Before attacking anything, map it. The more of the app you've seen, the more places you have to look for bugs.</p>
+
+      <h2>What Are We Looking For?</h2>
+      <ul class="content-list">
+        <li><b>Pages and endpoints</b>: every URL, form, and API route</li>
+        <li><b>Parameters</b>: every input the app accepts (<code>?id=</code>, form fields, JSON keys, headers)</li>
+        <li><b>Technology</b>: framework, server, libraries. Old versions have known bugs.</li>
+        <li><b>Leftovers</b>: comments, debug pages, backups, test accounts</li>
+      </ul>
+
+      <h2>Low-Hanging Fruit</h2>
+      <h3>View the source</h3>
+      <p>Developers leave notes in HTML comments that never show on the rendered page:</p>
+<pre><code><span class="c">&lt;!-- TODO: remove test account admin/admin123 before launch --&gt;</span></code></pre>
+
+      <h3>Read the JavaScript</h3>
+      <p>Frontend JS often contains API endpoints, feature flags, hardcoded keys, and admin routes. Check the <b>Sources</b> tab in DevTools.</p>
+
+      <h3>robots.txt</h3>
+      <p><code>/robots.txt</code> tells search engines what <i>not</i> to index. That's also a list of places the owner didn't want people looking.</p>
+<pre><code>User-agent: *
+Disallow: <span class="r">/admin-old/</span>
+Disallow: <span class="r">/backup/</span></code></pre>
+
+      <h3>Common files worth checking</h3>
+      <table>
+        <tr><th>Path</th><th>Why</th></tr>
+        <tr><td><code>/robots.txt</code>, <code>/sitemap.xml</code></td><td>Lists of paths</td></tr>
+        <tr><td><code>/.git/</code></td><td>Exposed source code repository</td></tr>
+        <tr><td><code>/.env</code></td><td>Environment file with secrets</td></tr>
+        <tr><td><code>/backup/</code>, <code>*.bak</code>, <code>*.old</code></td><td>Forgotten copies</td></tr>
+        <tr><td><code>/api/</code>, <code>/swagger</code>, <code>/graphql</code></td><td>API docs and endpoints</td></tr>
+      </table>
+
+      <h2>Content Discovery</h2>
+      <p>For real targets, tools brute-force paths from a wordlist to find unlinked pages:</p>
+<pre><code><span class="c"># ffuf: fast web fuzzer</span>
+ffuf -u https://target.example/FUZZ -w wordlist.txt
+
+<span class="c"># gobuster</span>
+gobuster dir -u https://target.example -w wordlist.txt</code></pre>
+      <div class="callout danger">
+        <strong>Only with permission</strong>
+        Brute-forcing sends thousands of requests. Only point these tools at targets you're authorized to test.
+      </div>
+
+      <div class="callout">
+        <strong>Try it</strong>
+        Lab 01 (TrailMart) has a flag split into 3 pieces, hidden in the places covered on this page.
+      </div>
+
+      <a href="injection.html" class="next-section">04-injection <span>&rarr;</span></a>
+    </main>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

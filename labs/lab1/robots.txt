@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /labs/lab1/cart/
+Disallow: /labs/lab1/dev-backup/

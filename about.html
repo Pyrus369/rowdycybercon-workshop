@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>whoami | Breaking the Web</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="grid-bg"></div>
+  <button class="hamburger" aria-label="Toggle navigation">&#8801;</button>
+  <div class="sidebar-overlay"></div>
+
+  <div class="layout">
+    <nav class="sidebar"></nav>
+    <main class="main-content page-content">
+      <h1>Who's talking?</h1>
+      <p>Quick intro before we start breaking things.</p>
+
+      <div class="term-window whoami-term">
+        <div class="term-bar"><i></i><i></i><i></i><span>pyrus@rowdy: ~</span></div>
+        <div class="term-body">
+          <div class="cmd"><span class="ps1">$</span> whoami</div>
+          <div class="out name">Aditya Dindi <span>aka pyrus</span></div>
+
+          <div class="cmd"><span class="ps1">$</span> cat bio.txt</div>
+          <div class="out">UTSA grad currently working as a Cybersecurity Engineer / Pentester. Previously an Application Security Intern at Paycom and a Cyber Operations Intern at MITRE.</div>
+
+          <div class="cmd"><span class="ps1">$</span> echo $ROLE $LOCATION</div>
+          <div class="out">Red Team @ Viasat &middot; San Diego</div>
+
+          <div class="cmd"><span class="ps1">$</span> ls ~/highlights</div>
+          <div class="out">
+            <ul>
+              <li>CPTC Central Regional Champion (1st Place, 2023)</li>
+              <li>CSRF on GroupMe</li>
+              <li>Prev. Officer / President @ CompTIA Student Chapter</li>
+              <li>Former RowdyCon (Rowdy CyberCon) host</li>
+            </ul>
+          </div>
+
+          <div class="cmd"><span class="ps1">$</span> cat education.txt</div>
+          <div class="out">BBA Cybersecurity: University of Texas at San Antonio</div>
+
+          <div class="cmd"><span class="ps1">$</span> ls ~/certs</div>
+          <div class="out">
+            <div class="cert-row">
+              <span class="cert">OSCP<small>OffSec</small></span>
+              <span class="cert">CWES<small>Hack The Box</small></span>
+              <span class="cert">Security+<small>CompTIA</small></span>
+              <span class="cert">CySA+<small>CompTIA</small></span>
+            </div>
+          </div>
+
+          <div class="cmd"><span class="ps1">$</span> <span class="cursor"></span></div>
+        </div>
+      </div>
+
+      <h2>The plan for today</h2>
+      <ul class="content-list">
+        <li>See what actually happens between your browser and a web server</li>
+        <li>Get comfortable with the tools that let you watch and tamper with that traffic</li>
+        <li>Learn the big three bug families: injection, XSS, and broken access control</li>
+        <li>Hack 8 purpose-built vulnerable apps and grab their flags</li>
+      </ul>
+
+      <div class="callout warn">
+        <strong>Rules of engagement</strong>
+        These labs exist to be attacked, so go wild. Real systems are different: if you don't own it or don't have
+        written permission to test it, don't touch it. Unauthorized testing is illegal. Stick to labs, CTFs, and bug
+        bounty programs that invite you in.
+      </div>
+
+      <a href="foundations.html" class="next-section">01-web-basics <span>&rarr;</span></a>
+    </main>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

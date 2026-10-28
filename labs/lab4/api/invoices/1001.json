@@ -1,0 +1,13 @@
+{
+  "id": 1001,
+  "customer": "Administrator",
+  "email": "admin@invoicehub.local",
+  "items": [
+    {
+      "desc": "Enterprise license (internal)",
+      "amount": 0.0
+    }
+  ],
+  "total": 0.0,
+  "notes": "Internal account. Flag: RCC{1d0r_y0ur_n31ghb0rs_d4t4}"
+}

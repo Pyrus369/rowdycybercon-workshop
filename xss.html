@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>05 Cross-Site Scripting | Breaking the Web</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="grid-bg"></div>
+  <button class="hamburger" aria-label="Toggle navigation">&#8801;</button>
+  <div class="sidebar-overlay"></div>
+
+  <div class="layout">
+    <nav class="sidebar"></nav>
+    <main class="main-content page-content">
+      <h1><span class="num">05.</span> Cross-Site Scripting</h1>
+      <p class="lead">XSS lets an attacker run their JavaScript in someone else's browser, on a site that person trusts.</p>
+
+      <h2>Why It Matters</h2>
+      <p>JavaScript running on <code>bank.com</code> can do anything the logged-in user can: read the page, make requests as them, change settings, or steal non-HttpOnly cookies. <code>alert()</code> is just the proof that you can run code.</p>
+
+      <h2>How It Happens</h2>
+      <p>The app puts your input into the page without encoding it:</p>
+<pre><code><span class="c">&lt;!-- template --&gt;</span>
+&lt;p&gt;Results for: {{ query }}&lt;/p&gt;
+
+<span class="c">&lt;!-- you search for: &lt;b&gt;hi&lt;/b&gt; --&gt;</span>
+&lt;p&gt;Results for: <span class="r">&lt;b&gt;hi&lt;/b&gt;</span>&lt;/p&gt;   <span class="c">← rendered as bold, so HTML injection works</span></code></pre>
+      <p>If HTML works, try making it run JavaScript.</p>
+
+      <h2>Three Flavors</h2>
+      <table>
+        <tr><th>Type</th><th>Where the payload lives</th><th>Example</th></tr>
+        <tr><td><b>Reflected</b></td><td>In the request (usually the URL). Victim must click your link.</td><td><code>/search?q=&lt;payload&gt;</code></td></tr>
+        <tr><td><b>Stored</b></td><td>Saved by the app and shown to everyone who views it</td><td>Comments, profiles, guestbooks</td></tr>
+        <tr><td><b>DOM-based</b></td><td>JavaScript on the page reads input and writes it into the DOM</td><td><code>el.innerHTML = location.hash</code></td></tr>
+      </table>
+
+      <h2>Payloads</h2>
+<pre><code><span class="c">&lt;!-- the classic --&gt;</span>
+&lt;script&gt;alert(1)&lt;/script&gt;
+
+<span class="c">&lt;!-- event handlers: work even where &lt;script&gt; doesn't --&gt;</span>
+&lt;img src=x onerror=alert(1)&gt;
+&lt;svg onload=alert(1)&gt;
+&lt;details open ontoggle=alert(1)&gt;
+
+<span class="c">&lt;!-- breaking out of an attribute: value="INPUT" --&gt;</span>
+"&gt;&lt;img src=x onerror=alert(1)&gt;
+" autofocus onfocus="alert(1)</code></pre>
+      <div class="callout warn">
+        <strong>Gotcha: innerHTML</strong>
+        If JavaScript inserts your input with <code>innerHTML</code>, <code>&lt;script&gt;</code> tags <b>will not run</b>.
+        Use an event handler payload like <code>&lt;img src=x onerror=alert(1)&gt;</code> instead.
+      </div>
+
+      <h2>Sources &amp; Sinks</h2>
+      <p>For DOM XSS, trace where data <b>comes from</b> (source) to where it's <b>used dangerously</b> (sink):</p>
+      <div class="two-panel">
+        <div class="panel" style="border-color: var(--accent-orange);">
+          <div class="panel-header" style="color: var(--accent-orange);">Sources</div>
+          <ul class="content-list">
+            <li><code>location.search</code></li>
+            <li><code>location.hash</code></li>
+            <li><code>document.cookie</code></li>
+            <li><code>localStorage</code></li>
+          </ul>
+        </div>
+        <div class="panel" style="border-color: var(--accent-red);">
+          <div class="panel-header" style="color: var(--accent-red);">Sinks</div>
+          <ul class="content-list">
+            <li><code>innerHTML</code> / <code>outerHTML</code></li>
+            <li><code>document.write()</code></li>
+            <li><code>eval()</code></li>
+            <li><code>element.src</code> / <code>.href</code></li>
+          </ul>
+        </div>
+      </div>
+
+      <h2>The Fix</h2>
+      <ul class="content-list">
+        <li><b>Output encoding</b>: turn <code>&lt;</code> into <code>&amp;lt;</code>. Modern template engines do this by default.</li>
+        <li>Use <code>textContent</code> instead of <code>innerHTML</code></li>
+        <li><b>Content-Security-Policy</b> header as defense in depth</li>
+        <li><b>HttpOnly</b> cookies so JavaScript can't read session tokens</li>
+      </ul>
+
+      <a href="access-control.html" class="next-section">06-access-control <span>&rarr;</span></a>
+    </main>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

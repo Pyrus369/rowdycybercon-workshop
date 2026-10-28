@@ -1,0 +1,13 @@
+{
+  "id": 1002,
+  "customer": "Sam Patel",
+  "email": "sam.patel@example.com",
+  "items": [
+    {
+      "desc": "Consulting services",
+      "amount": 487.99
+    }
+  ],
+  "total": 487.99,
+  "notes": ""
+}

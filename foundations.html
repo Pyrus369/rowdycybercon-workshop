@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>01 How the Web Works | Breaking the Web</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="grid-bg"></div>
+  <button class="hamburger" aria-label="Toggle navigation">&#8801;</button>
+  <div class="sidebar-overlay"></div>
+
+  <div class="layout">
+    <nav class="sidebar"></nav>
+    <main class="main-content page-content">
+      <h1><span class="num">01.</span> How the Web Works</h1>
+      <p class="lead">You can't break what you don't understand. Every web bug comes down to a request the developer didn't expect.</p>
+
+      <h2>Client &amp; Server</h2>
+      <p>A web application is a conversation between two sides:</p>
+      <div class="card-grid">
+        <div class="info-card">
+          <div class="info-value">Client</div>
+          <div class="info-label">Your browser. Runs HTML, CSS and JavaScript. <b>You fully control it.</b></div>
+        </div>
+        <div class="info-card">
+          <div class="info-value">Server</div>
+          <div class="info-label">Their machine. Runs the app logic and talks to the database. You only control what you send it.</div>
+        </div>
+      </div>
+      <div class="callout">
+        <strong>The golden rule</strong>
+        Anything that comes from the client can be changed by the client. Form fields, hidden inputs, cookies,
+        headers, JavaScript checks: all of it. If the server trusts it, that's a bug.
+      </div>
+
+      <h2>HTTP Requests</h2>
+      <p>Every click, form submit, and page load sends an HTTP request. It's just text:</p>
+<pre><code><span class="k">POST</span> /login HTTP/1.1
+Host: shop.example.com
+Cookie: session=a8f3c91e
+Content-Type: application/x-www-form-urlencoded
+
+<span class="s">username=alice&amp;password=hunter2</span></code></pre>
+      <table>
+        <tr><th>Part</th><th>What it is</th><th>Why hackers care</th></tr>
+        <tr><td><code>POST</code></td><td>Method (GET, POST, PUT, DELETE...)</td><td>Sometimes a different method skips a check</td></tr>
+        <tr><td><code>/login</code></td><td>Path, plus an optional <code>?query=string</code></td><td>Parameters in the URL are trivial to change</td></tr>
+        <tr><td>Headers</td><td>Metadata: Host, Cookie, User-Agent...</td><td>Cookies hold your identity</td></tr>
+        <tr><td>Body</td><td>Data being sent</td><td>Main place to inject input</td></tr>
+      </table>
+
+      <h2>HTTP Responses</h2>
+<pre><code>HTTP/1.1 <span class="s">200 OK</span>
+Content-Type: text/html
+Set-Cookie: session=7d21bb04; HttpOnly
+
+&lt;html&gt;Welcome back, alice!&lt;/html&gt;</code></pre>
+      <table>
+        <tr><th>Status</th><th>Meaning</th></tr>
+        <tr><td><code>200</code></td><td>OK</td></tr>
+        <tr><td><code>301 / 302</code></td><td>Redirect</td></tr>
+        <tr><td><code>401 / 403</code></td><td>Not logged in / not allowed. <i>Interesting!</i></td></tr>
+        <tr><td><code>404</code></td><td>Not found</td></tr>
+        <tr><td><code>500</code></td><td>Server error. You probably broke something. <i>Very interesting!</i></td></tr>
+      </table>
+
+      <h2>Cookies &amp; Sessions</h2>
+      <p>HTTP is stateless: each request stands alone. So how does a site remember you're logged in?</p>
+      <ol class="content-list">
+        <li>You log in successfully.</li>
+        <li>Server responds with <code>Set-Cookie: session=7d21bb04</code>.</li>
+        <li>Your browser automatically sends <code>Cookie: session=7d21bb04</code> with every later request.</li>
+        <li>Server looks up who owns that session.</li>
+      </ol>
+      <div class="callout warn">
+        <strong>Think like an attacker</strong>
+        What if the cookie isn't a random ID, but something readable like <code>role=user</code>?
+        What if you could steal someone else's cookie? You'll try both later.
+      </div>
+
+      <h2>Where Input Goes</h2>
+      <p>Most vulnerabilities happen when your input lands somewhere it gets <b>interpreted</b> instead of treated as plain data:</p>
+      <table>
+        <tr><th>Your input ends up in...</th><th>Bug class</th></tr>
+        <tr><td>A SQL query</td><td>SQL Injection</td></tr>
+        <tr><td>A shell command</td><td>Command Injection</td></tr>
+        <tr><td>An HTML page</td><td>Cross-Site Scripting (XSS)</td></tr>
+        <tr><td>An ID used to look up data</td><td>IDOR / Broken Access Control</td></tr>
+      </table>
+
+      <a href="tooling.html" class="next-section">02-tooling <span>&rarr;</span></a>
+    </main>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
