@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>07 Game Plan | Breaking the Web</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="grid-bg"></div>
+  <button class="hamburger" aria-label="Toggle navigation">&#8801;</button>
+  <div class="sidebar-overlay"></div>
+
+  <div class="layout">
+    <nav class="sidebar"></nav>
+    <main class="main-content page-content">
+      <h1><span class="num">07.</span> Game Plan</h1>
+      <p class="lead">Knowing bug classes is half of it. The other half is having a process you can run on any app, every time, without getting lost.</p>
+
+      <h2>The Loop</h2>
+
+      <ol class="methodology-checklist">
+        <li>
+          <strong>Be a user first</strong>
+          Sign up, click every button, fill out every form. You can't spot weird behavior until you know what normal looks like.
+        </li>
+        <li>
+          <strong>Build a map</strong>
+          With Burp or the Network tab running, write down every page, API call, and parameter you see.
+          Then go digging: page source, JS files, <code>robots.txt</code>.
+        </li>
+        <li>
+          <strong>Follow your input</strong>
+          Pick a parameter and figure out where it lands. A database query? A shell command? Back on the page? Used to look up a record?
+          That tells you which bug to hunt for.
+        </li>
+        <li>
+          <strong>Poke it</strong>
+          Send small, harmless probes and compare responses. An error, a missing chunk of page, or a different result count is a lead.
+        </li>
+        <li>
+          <strong>Prove it</strong>
+          Once something looks off, slow down and work out exactly why. Build a payload for that specific spot instead of pasting a list and hoping.
+        </li>
+        <li>
+          <strong>Write it down, move on</strong>
+          Save the request, the steps, and the impact. Most leads go nowhere, and that's normal. The people who find bugs are the ones who keep looping.
+        </li>
+      </ol>
+
+      <h2>Cheat Sheet</h2>
+
+      <div class="two-panel">
+        <div class="panel" style="border-top: 3px solid var(--blue);">
+          <div class="panel-header" style="color: var(--blue);">Where to poke</div>
+          <ul class="content-list">
+            <li>Query strings: <code>?id=</code>, <code>?q=</code></li>
+            <li>Form fields, hidden ones too</li>
+            <li>JSON in API requests</li>
+            <li>Cookies</li>
+            <li>Headers: <code>User-Agent</code>, <code>Referer</code></li>
+            <li>IDs in the path: <code>/user/1042</code></li>
+            <li>File names and uploads</li>
+          </ul>
+        </div>
+
+        <div class="panel" style="border-top: 3px solid var(--accent);">
+          <div class="panel-header" style="color: var(--accent);">What to send</div>
+          <ul class="content-list">
+            <li>SQLi: <code>'</code> then <code>' OR '1'='1</code></li>
+            <li>Column count: <code>' ORDER BY 1--</code></li>
+            <li>HTML injection: <code>&lt;b&gt;hi&lt;/b&gt;</code></li>
+            <li>XSS: <code>&lt;img src=x onerror=alert(1)&gt;</code></li>
+            <li>Command injection: <code>; id</code>, <code>| whoami</code></li>
+            <li>IDOR: your ID ± 1</li>
+            <li>Access control: <code>role=admin</code></li>
+          </ul>
+        </div>
+      </div>
+
+      <h2>Where to go next</h2>
+
+      <div class="card-grid">
+        <div class="card">
+          <h4 style="margin-top:0">Keep learning</h4>
+          <ul class="content-list resource-list">
+            <li><a href="https://portswigger.net/web-security" target="_blank" rel="noopener">PortSwigger Web Security Academy</a>: free labs for every bug class. Do this next.</li>
+            <li><a href="https://owasp.org/www-project-top-ten/" target="_blank" rel="noopener">OWASP Top 10</a></li>
+            <li><a href="https://github.com/swisskyrepo/PayloadsAllTheThings" target="_blank" rel="noopener">PayloadsAllTheThings</a></li>
+            <li><a href="https://developer.mozilla.org/en-US/" target="_blank" rel="noopener">MDN Web Docs</a></li>
+          </ul>
+        </div>
+        <div class="card">
+          <h4 style="margin-top:0">Practice</h4>
+          <ul class="content-list resource-list">
+            <li><a href="https://tryhackme.com/" target="_blank" rel="noopener">TryHackMe</a>: guided and beginner-friendly</li>
+            <li><a href="https://www.hackthebox.com/" target="_blank" rel="noopener">Hack The Box</a>: realistic boxes and web challenges</li>
+            <li><a href="https://picoctf.org/" target="_blank" rel="noopener">picoCTF</a>: free CTF practice</li>
+            <li><a href="https://owasp.org/www-project-juice-shop/" target="_blank" rel="noopener">OWASP Juice Shop</a>: run it locally and break it</li>
+            <li><a href="https://hackerone.com/hacktivity" target="_blank" rel="noopener">HackerOne Hacktivity</a>: read real bug reports</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h4 style="margin-top:0">Get involved</h4>
+          <ul class="content-list resource-list">
+            <li>Competitions:
+              <a href="https://www.nationalccdc.org/" target="_blank" rel="noopener">CCDC</a>,
+              <a href="https://cp.tc/" target="_blank" rel="noopener">CPTC</a>,
+              <a href="https://cyberforcecompetition.com/" target="_blank" rel="noopener">CyberForce</a>,
+              <a href="https://nationalcyberleague.org/" target="_blank" rel="noopener">National Cyber League</a>.
+              The best way to build skills (and your resume) as a student.</li>
+            <li>Cyber clubs on campus: there are a lot of them, and if you're here, you're already doing the right thing.</li>
+            <li><a href="https://darknetdiaries.com/" target="_blank" rel="noopener">Darknet Diaries</a>: true stories from the dark side of the internet.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h4 style="margin-top:0">Browser add-ons</h4>
+          <ul class="content-list resource-list">
+            <li><a href="https://www.wappalyzer.com/" target="_blank" rel="noopener">Wappalyzer</a>: see what a site is built with</li>
+            <li><a href="https://cookie-editor.com/" target="_blank" rel="noopener">Cookie-Editor</a>: view and edit cookies fast</li>
+            <li><a href="https://getfoxyproxy.org/" target="_blank" rel="noopener">FoxyProxy</a>: flip your traffic to Burp in one click</li>
+          </ul>
+        </div>
+      </div>
+
+      <a href="labs/index.html" class="next-section">labs/capture-the-flag <span>&rarr;</span></a>
+    </main>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

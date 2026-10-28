@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InvoiceHub</title>
+<link rel="stylesheet" href="../lab.css"><style>:root{--brand:#0e7490}</style>
+</head>
+<body>
+<div class="labbar"><span>Rowdy CyberCon // Lab 04: InvoiceHub</span><a href="../index.html">&larr; back to labs</a></div>
+<header class="app-header"><h1>InvoiceHub</h1><nav><a href="#">Dashboard</a><a href="#">Invoices</a><a href="#" id="who"></a></nav></header>
+<div class="wrap">
+  <div class="panel"><h2>My Invoices</h2><div id="list" class="muted">Loading...</div></div>
+  <div class="panel hidden" id="detail"></div>
+</div>
+<script>
+async function load() {
+  const me = await (await fetch('api/me.json')).json();
+  document.getElementById('who').textContent = me.user;
+  const list = document.getElementById('list');
+  list.innerHTML = '';
+  for (const id of me.invoice_ids) {
+    const inv = await (await fetch('api/invoices/' + id + '.json')).json();
+    const a = document.createElement('a');
+    a.href = '#'; a.className = 'btn'; a.style.marginRight = '10px';
+    a.textContent = 'Invoice #' + inv.id + ' - $' + inv.total.toFixed(2);
+    a.onclick = e => { e.preventDefault(); show(inv); };
+    list.appendChild(a);
+  }
+}
+function show(inv) {
+  const d = document.getElementById('detail');
+  d.classList.remove('hidden');
+  d.innerHTML = '';
+  const add = (tag, text, cls) => { const n = document.createElement(tag); n.textContent = text; if (cls) n.className = cls; d.appendChild(n); };
+  add('h2', 'Invoice #' + inv.id);
+  add('p', inv.customer + ' <' + inv.email + '>');
+  inv.items.forEach(i => add('p', i.desc + ': $' + i.amount.toFixed(2)));
+  add('p', 'Total: $' + inv.total.toFixed(2));
+  if (inv.notes) add('p', inv.notes, 'muted');
+}
+load();
+</script>
+</body>
+</html>
