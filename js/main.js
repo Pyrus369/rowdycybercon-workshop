@@ -9,6 +9,7 @@
       { href: 'xss.html', file: '05-xss', ext: '.md' },
       { href: 'access-control.html', file: '06-access-control', ext: '.md' },
       { href: 'methodology.html', file: '07-game-plan', ext: '.md' },
+      { href: '08-connect.html', file: '08-connect', ext: '.md' },
     ]},
     { dir: 'labs/', items: [
       { href: 'labs/index.html', file: 'capture-the-flag', ext: '.sh', cmd: 'ls -la labs/' },
