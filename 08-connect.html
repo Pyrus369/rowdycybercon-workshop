@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>08 Connect | Breaking the Web</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+.connect-card{max-width:680px;margin:2rem auto;border:1px solid var(--border,#2a3a40);background:rgba(10,20,24,.75);padding:2rem;border-radius:8px;text-align:center}
+.connect-card h2{margin-top:0}
+.connect-qr{background:#fff;padding:14px;border-radius:8px;width:230px;max-width:100%;height:auto;display:block;margin:1.5rem auto}
+.connect-link{display:inline-block;margin-top:.5rem;padding:.8rem 1.2rem;border:1px solid var(--accent-green,#4ade80);color:var(--accent-green,#4ade80);text-decoration:none;border-radius:4px;font-weight:bold}
+.connect-link:hover{background:rgba(74,222,128,.1)}
+.connect-note{opacity:.7;font-size:.9rem}
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+<button class="hamburger" aria-label="Toggle navigation">&#8801;</button>
+<div class="sidebar-overlay"></div>
+<div class="layout">
+<nav class="sidebar"></nav>
+<main class="main-content page-content">
+<h1><span class="num">08.</span> Connect</h1>
+<p class="lead">Thanks for joining the workshop! Let's stay connected.</p>
+<section class="connect-card">
+<h2>Let's connect on LinkedIn.</h2>
+<p>Want to share resources, discuss web application security, or keep in touch? Scan the QR code or visit my profile.</p>
+<a href="https://www.linkedin.com/in/adityadindi/" target="_blank" rel="noopener noreferrer" aria-label="Open Aditya Dindi's LinkedIn profile">
+<img class="connect-qr" src="assets/linkedin-qr.png" alt="QR code for Aditya Dindi's LinkedIn profile" width="230" height="230">
+</a>
+<a class="connect-link" href="https://www.linkedin.com/in/adityadindi/" target="_blank" rel="noopener noreferrer">Connect on LinkedIn ↗</a>
+<p class="connect-note">linkedin.com/in/adityadindi/</p>
+</section>
+<div class="callout"><strong>Keep hacking. Keep learning.</strong><p>Practice on authorized labs, document what you discover, and stay curious.</p></div>
+<a href="index.html" class="next-section">back-to-start <span>&rarr;</span></a>
+</main>
+</div>
+<script src="js/main.js"></script>
+</body>
+</html>
